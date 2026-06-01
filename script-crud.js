@@ -152,6 +152,7 @@ const removerTarefas = (somenteCompletas) => {
     ? tarefas.filter((tarefa_da_vez) => !tarefa_da_vez.completa)
     : [];
   atualizarTarefas();
+  paragrafoDescricaoEmAndamento.textContent = "";
 };
 
 buttonRemoverTarefasConcluidas.onclick = () => removerTarefas(true);
