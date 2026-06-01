@@ -1,16 +1,16 @@
-let html = document.querySelector("html");
+const html = document.querySelector("html");
 
-let comecarButton = document.querySelector(".app__card-primary-button"); // Botão "Começar" para iniciar o temporizador
-let iniciarOuPausarButton = document.querySelector("#start-pause span");
+const comecarButton = document.querySelector(".app__card-primary-button"); // Botão "Começar" para iniciar o temporizador
+const iniciarOuPausarButton = document.querySelector("#start-pause span");
 let intervaloID = null;
 
-let focoButton = document.querySelector(".app__card-button--foco");
-let descansoCurtoButton = document.querySelector(".app__card-button--curto");
-let descansoLongoButton = document.querySelector(".app__card-button--longo");
+const focoButton = document.querySelector(".app__card-button--foco");
+const descansoCurtoButton = document.querySelector(".app__card-button--curto");
+const descansoLongoButton = document.querySelector(".app__card-button--longo");
 
-let buttons = document.querySelectorAll(".app__card-button"); // Utilizamos "All" porque estamos pegando mais de um elemento
+const buttons = document.querySelectorAll(".app__card-button"); // Utilizamos "All" porque estamos pegando mais de um elemento
 
-let musicaFocoInput = document.querySelector("#alternar-musica"); // Permitirá que a música de foco toque durante o tempo que o usuário quiser
+const musicaFocoInput = document.querySelector("#alternar-musica"); // Permitirá que a música de foco toque durante o tempo que o usuário quiser
 
 // Guardando o arquivo das músicas em variáveis: música = toca durante o tempo que o usuário estuda/descansa / beep = quando o timer chega a 0 / play e pause
 let musica = new Audio("./sons/luna-rise-part-one.mp3");
@@ -18,12 +18,12 @@ let musicaBeep = new Audio("./sons/beep.mp3");
 let musicaPlay = new Audio("./sons/play.wav");
 let musicaPause = new Audio("./sons/pause.mp3");
 
-let timer = document.querySelector(".app__card-timer"); //Temporizador da tela
+const timer = document.querySelector(".app__card-timer"); //Temporizador da tela
 
-let img = document.querySelector(".app__image");
-let imgPlayOuPause = document.querySelector(".app__card-primary-butto-icon");
+const img = document.querySelector(".app__image");
+const imgPlayOuPause = document.querySelector(".app__card-primary-butto-icon");
 
-let titulo = document.querySelector(".app__title");
+const titulo = document.querySelector(".app__title");
 
 const tempFoco = 1500; // Temporizador de foco
 const tempDescansoCurto = 300; // Temporizador de descanso curto
@@ -61,9 +61,7 @@ descansoLongoButton.addEventListener("click", () => {
 function alterarContexto(contexto) {
   zerar();
   mostrarTempo();
-  buttons.forEach(function (contexto) {
-    contexto.classList.remove("active");
-  });
+  buttons.forEach((botao) => botao.classList.remove("active"));
 
   html.setAttribute("data-contexto", contexto);
   img.setAttribute("src", `img/${contexto}.png`);
@@ -88,6 +86,11 @@ const contagemRegressiva = () => {
     musicaBeep.play();
     musica.pause();
     alert("Tempo finalizado!");
+    const focoAtivo = html.getAttribute("data-contexto") == "foco";
+    if (focoAtivo) {
+      let evento = new CustomEvent("FocoFinalizado");
+      document.dispatchEvent(evento);
+    }
     zerar();
     return;
   }
@@ -102,6 +105,7 @@ function iniciarOuPausar() {
   if (intervaloID) {
     musicaPause.play();
     musica.pause();
+    musicaFocoInput.checked = false;
     zerar();
     return;
   } else {
